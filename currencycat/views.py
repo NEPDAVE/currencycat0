@@ -66,11 +66,11 @@ def send(recipient, message):
 
 #return render_template('index.html', **paramapp.route("/")
 @app.route("/")
-def hello():
+def index():
 
     params = {q: Quote(pair=q).quote for q in major_pairs}
 
     return render_template('about.html', **params)
 
-if __name__ == "__main__":
-    app.run(host='localhost', debug=True)
+2016-06-02T16:56:36.939990+00:00 heroku[router]: at=error code=H10 desc="App crashed" method=GET path="/"
+host=currencycat.herokuapp.com request_id=4b534116-9bcb-43b9-8d79-7dbd6adc1d41 fwd="50.246.244.22" dyno= connect= service= status=503 bytes=
