@@ -1,0 +1,1 @@
+web: gunicorn currencycat:app -b 0.0.0.0

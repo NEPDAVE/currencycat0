@@ -4,13 +4,12 @@ from flask import Flask, request, redirect, Response, render_template
 from twilio.rest import TwilioRestClient
 import twilio.twiml
 
-from models import Quote
 
+from models import Quote
+from currencycat import app
 
 #Twilio number
 #980 223 6739
-
-app = Flask(__name__)
 
 major_pairs = ['EUR_USD', 'GBP_USD', 'USD_CHF', 'USD_JPY']
 
