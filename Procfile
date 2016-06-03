@@ -1,1 +1,1 @@
-web: gunicorn currencycat:app $PORT
+web: gunicorn currencycat:app -b 50.246.244.22
