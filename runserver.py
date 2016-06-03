@@ -1,2 +1,2 @@
 from currencycat import app
-app.run(host='0.0.0.0', port=port, debug=True)
+app.run(port=port, debug=True)
