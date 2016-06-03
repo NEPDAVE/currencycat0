@@ -1,1 +1,1 @@
-web: gunicorn currencycat:app -b 50.246.244.22
+web: gunicorn currencycat:app -b 0.0.0.0
