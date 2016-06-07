@@ -27,14 +27,6 @@ class Quote(object):
             "Timezone": "America/New_York"
             }
 
-        params = {
-            "instrument": "EUR_USD",
-            "count": "1",
-            "candleFormat": "midpoint",
-            "granularity": "S5",
-            "Timezone": "America/New_York"
-            }
-
         URL = "https://api-fxpractice.oanda.com/v1/candles"
 
         r = requests.get(URL, params=params, headers=headers)
