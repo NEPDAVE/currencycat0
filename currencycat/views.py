@@ -10,7 +10,7 @@ from currencycat import app
 #Twilio number
 #980 223 6739
 
-major_pairs = ['EUR_USD', 'GBP_USD', 'USD_CHF', 'USD_JPY']
+major_pairs = ["EUR_USD", "GBP_USD", "USD_CHF", "USD_JPY"]
 
 @app.route("/quote")
 def receive():
