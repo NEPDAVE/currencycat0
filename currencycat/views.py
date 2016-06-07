@@ -4,7 +4,6 @@ from flask import Flask, request, redirect, Response, render_template
 from twilio.rest import TwilioRestClient
 import twilio.twiml
 
-
 from models import Quote
 from currencycat import app
 
