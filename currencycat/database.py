@@ -1,38 +1,22 @@
-import os
-import sqlalchemy
-
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from currencycat import models
 from currencycat import db
 
-db.session
 
-[u'instrument', u'candles', u'granularity']
+def seed_db():
+    q = models.Quote(pair='EUR_USD', granularity='H4', count=50)
+    for candle in q.response['candles']:
+        row = models.Candle()
 
-{
-  u'closeMid': 1.141445,
-  u'complete': True,
-  u'highMid': 1.141445,
-  u'lowMid': 1.141415,
-  u'openMid': 1.141415,
-  u'time': u'2016-06-09T02:57:20.000000Z',
-  u'volume': 2
-  }
+        row.instrument = q.pair
+        row.complete = candle['complete']
+        row.closeMid = candle['closeMid']
+        row.highMid = candle['highMid']
+        row.lowMid = candle['lowMid']
+        row.volume = candle['volume']
+        row.openMid = candle['openMid']
+        #FIXME convert this from a string to a DateTime object
+        row.time = candle['time']
+        row.granularity = q.granularity
 
-
-Base = declarative_base()
-
-class Candle(Base):
-    __tablename__ = "Candles"
-
-    #FIXME Oanda uses instrument instead of pair. Should I use their language?
-    uid = db.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    instrument = db.Column(sqlalchemy.String)
-    complete = db.Column(sqlalchemy.Boolean)
-    closeMid = db.Column(sqlalchemy.Float)
-    highMid = db.Column(sqlalchemy.Float)
-    lowMid = db.Column(sqlalchemy.Float)
-    volume = db.Column(sqlalchemy.Integer)
-    openMid = db.Column(sqlalchemy.Float)
-    time = db.Column(sqlalchemy.DateTime)
-    granularity = db.Column(sqlalchemy.String)
+        db.session.add(row)
+    db.session.commit()

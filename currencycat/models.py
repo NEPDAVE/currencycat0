@@ -7,6 +7,21 @@ from sqlalchemy.ext.declarative import declarative_base
 from currencycat import db
 
 
+class Candle(db.Model):
+    __tablename__ = "Candles"
+
+    #FIXME Oanda uses instrument instead of pair. Should I use their language?
+    uid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    instrument = db.Column(db.String)
+    complete = db.Column(db.Boolean)
+    closeMid = db.Column(db.Float)
+    highMid = db.Column(db.Float)
+    lowMid = db.Column(db.Float)
+    volume = db.Column(db.Integer)
+    openMid = db.Column(db.Float)
+    time = db.Column(db.DateTime)
+    granularity = db.Column(db.String)
+
 
 #FIXME is this the best name for this class? You're also using it to get
 #entire candels.
@@ -45,19 +60,3 @@ class Quote(object):
         self.quote = r.json()['candles'][0]['closeMid']
 
         return r.json()
-
-
-class Candle(db.Model):
-    __tablename__ = "Candles"
-
-    #FIXME Oanda uses instrument instead of pair. Should I use their language?
-    uid = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    instrument = db.Column(db.String)
-    complete = db.Column(db.Boolean)
-    closeMid = db.Column(db.Float)
-    highMid = db.Column(db.Float)
-    lowMid = db.Column(db.Float)
-    volume = db.Column(db.Integer)
-    openMid = db.Column(db.Float)
-    time = db.Column(db.DateTime)
-    granularity = db.Column(db.String)
