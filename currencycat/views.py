@@ -66,11 +66,13 @@ Text 'Read' for a great article on how to read currency pairs.
         send(request.args['From'], read_msg)
     elif msg.upper() in all_pairs:
         quote = Quote(pair=msg.upper())
-        quote_msg = "{} = {}".format(msg, quote.quote)
+        quote_msg = "{} = {}".format(msg.upper(), quote.quote)
         send(request.args['From'], quote_msg)
     else:
-        send(request.args['From'], """Sorry, please try again. Text 'Hello' for
-                                    instructions""")
+        send(request.args['From'], """
+        Sorry, please try again.
+        Text 'Hello' fo instructions
+        """)
     return msg
 
 
