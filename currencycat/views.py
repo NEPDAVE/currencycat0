@@ -28,14 +28,18 @@ Text 'Read' for a great article on how to read currency pairs.
     msg = request.args.get("Body", "None")
     print msg
 
-    if msg == "Hello":
+    msg = msg.lower()
+
+    if msg == "hello":
         send(request.args['From'], instructions)
-    elif msg == "Majors":
+    elif msg == "majors":
+        quote_msg = ""
         for pair in major_pairs:
             quote = Quote(pair=pair)
-            quote_msg = "{} = {}".format(pair, quote.quote)
-            send(request.args['From'], quote_msg)
-    elif msg == "Read":
+            majors_quote = "{} = {}".format(pair, quote.quote)
+            quote_msg += str(majors_quote) + "\n"
+        send(request.args['From'], quote_msg)
+    elif msg == "read":
         read_msg = "A great article on how to read currency pairs: {}".format(
             "http://www.investopedia.com/university/forexmarket/forex2.asp")
         send(request.args['From'], read_msg)
