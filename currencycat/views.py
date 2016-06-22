@@ -10,7 +10,28 @@ from currencycat import app
 #Twilio number
 #980 223 6739
 
-major_pairs = ["EUR_USD", "GBP_USD", "USD_CHF", "USD_JPY"]
+#help email
+#api@oanda.com
+#list of all available rates in the USA
+#https://www.oanda.com/resources/legal/united-states/legal/margin-rates
+#curl command to get all instruments
+#curl -X GET "https://api-fxtrade.oanda.com/v1/instruments?accountId=8500841"
+
+major_pairs = ['EUR_USD', 'GBP_USD', 'USD_CHF', 'USD_JPY']
+all_pairs = [
+    'AUD_CAD', 'AUD_CHF', 'AUD_HKD', 'AUD_JPY', 'AUD_NZD', 'AUD_SGD',
+    'AUD_USD', 'CAD_CHF', 'CAD_HKD', 'CAD_JPY', 'CAD_SGD', 'CHF_HKD',
+    'CHF_JPY', 'CHF_ZAR', 'EUR_AUD', 'EUR_CAD', 'EUR_CHF', 'EUR_CZK',
+    'EUR_DKK', 'EUR_GBP', 'EUR_HKD', 'EUR_HUF', 'EUR_JPY', 'EUR_NOK',
+    'EUR_NZD', 'EUR_PLN', 'EUR_SEK', 'EUR_SGD', 'EUR_TRY', 'EUR_USD',
+    'EUR_ZAR', 'GBP_AUD', 'GBP_CAD', 'GBP_CHF', 'GBP_HKD', 'GBP_JPY',
+    'GBP_NZD', 'GBP_PLN', 'GBP_SGD', 'GBP_USD', 'GBP_ZAR', 'HKD_JPY',
+    'NZD_CAD', 'NZD_CHF', 'NZD_HKD', 'NZD_JPY', 'NZD_SGD', 'NZD_USD',
+    'SGD_CHF', 'SGD_HKD', 'SGD_JPY', 'TRY_JPY', 'USD_CAD', 'USD_CHF',
+    'USD_CNH', 'USD_CZK', 'USD_DKK', 'USD_HKD', 'USD_HUF', 'USD_JPY',
+    'USD_MXN', 'USD_NOK', 'USD_PLN', 'USD_SAR', 'USD_SEK', 'USD_SGD',
+    'USD_THB', 'USD_TRY', 'USD_ZAR', 'ZAR_JPY'
+    ]
 
 @app.route("/quote")
 def receive():
@@ -43,11 +64,13 @@ Text 'Read' for a great article on how to read currency pairs.
         read_msg = "A great article on how to read currency pairs: {}".format(
             "http://www.investopedia.com/university/forexmarket/forex2.asp")
         send(request.args['From'], read_msg)
-    else:
-        quote = Quote(pair=msg)
+    elif msg.upper() in all_pairs:
+        quote = Quote(pair=msg.upper())
         quote_msg = "{} = {}".format(msg, quote.quote)
         send(request.args['From'], quote_msg)
-
+    else:
+        send(request.args['From'], """Sorry, please try again. Text 'Hello' for
+                                    instructions""")
     return msg
 
 
