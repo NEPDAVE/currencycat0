@@ -70,9 +70,8 @@ Text 'Read' for a great article on how to read currency pairs.
         send(request.args['From'], quote_msg)
     else:
         send(request.args['From'], """
-        Sorry, please try again.
-        Text 'Hello' for instructions
-        """)
+            Sorry, please try again. Text 'Hello' for instructions
+            """)
     return msg
 
 
