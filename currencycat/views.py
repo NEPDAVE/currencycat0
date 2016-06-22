@@ -71,7 +71,7 @@ Text 'Read' for a great article on how to read currency pairs.
     else:
         send(request.args['From'], """
         Sorry, please try again.
-        Text 'Hello' fo instructions
+        Text 'Hello' for instructions
         """)
     return msg
 
