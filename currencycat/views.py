@@ -70,7 +70,7 @@ Text 'Read' for a great article on how to read currency pairs.
         send(request.args['From'], quote_msg)
     elif msg == "buy?":
         decision = buy_forex("EUR_USD", "H4", 5, .01)
-        send(request.args['From'], decision)
+        send(request.args['From'], str(decision))
     else:
         send(request.args['From'], """
             Sorry, please try again. Text 'Hello' for instructions
