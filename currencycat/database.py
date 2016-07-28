@@ -11,17 +11,18 @@ def seed_db():
 
             row.instrument = q.pair
             row.complete = candle['complete']
-            row.closeMid = candle['closeMid']
-            row.highMid = candle['highMid']
-            row.lowMid = candle['lowMid']
+            row.closemid = candle['closeMid']
+            row.highmid = candle['highMid']
+            row.lowmid = candle['lowMid']
             row.volume = candle['volume']
-            row.openMid = candle['openMid']
-            #FIXME convert this from a string to a DateTime object
+            row.openmid = candle['openMid']
             row.time = datetime.strptime(candle['time'],
                                          "%Y-%m-%dT%H:%M:%S.%fZ")
             row.granularity = q.granularity
 
             db.session.add(row)
         db.session.commit()
-    except:
+        print 'stored {} candles'.format(len(q.response['candles']))
+    except Exception as e:
+        print 'ERROR: {}'.format(e)
         db.session.rollback()

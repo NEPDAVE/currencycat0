@@ -5,7 +5,7 @@ from twilio.rest import TwilioRestClient
 import twilio.twiml
 
 from models import Quote
-from currencycat import app
+from currencycat import app, analysis
 
 #Twilio number
 #980 223 6739
@@ -68,6 +68,9 @@ Text 'Read' for a great article on how to read currency pairs.
         quote = Quote(pair=msg.upper())
         quote_msg = "{} = {}".format(msg.upper(), quote.quote)
         send(request.args['From'], quote_msg)
+    elif msg == "buy?":
+        decision = buy_forex("EUR_USD", "H4", 5, .01)
+        send(request.args['From'], decision)
     else:
         send(request.args['From'], """
             Sorry, please try again. Text 'Hello' for instructions

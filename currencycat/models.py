@@ -8,17 +8,17 @@ from currencycat import db
 
 
 class Candle(db.Model):
-    __tablename__ = "Candles"
+    __tablename__ = "candles"
 
     #FIXME Oanda uses instrument instead of pair. Should I use their language?
     uid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     instrument = db.Column(db.String)
     complete = db.Column(db.Boolean)
-    closeMid = db.Column(db.Float)
-    highMid = db.Column(db.Float)
-    lowMid = db.Column(db.Float)
+    closemid = db.Column(db.Float)
+    highmid = db.Column(db.Float)
+    lowmid = db.Column(db.Float)
     volume = db.Column(db.Integer)
-    openMid = db.Column(db.Float)
+    openmid = db.Column(db.Float)
     time = db.Column(db.DateTime)
     granularity = db.Column(db.String)
 
