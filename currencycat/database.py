@@ -3,10 +3,15 @@ from currencycat import db
 from datetime import datetime
 
 
-def seed_db():
-    q = models.Quote(pair='EUR_USD', granularity='H4', count=5000)
+def seed_db(pair=None, count=None, granularity=None):
+    q = models.Quote(pair=pair, granularity=granularity, count=count)
     try:
         for candle in q.response['candles']:
+            #FIXME do you want to think about checking if the value is already
+            #in the db before moving onto the next candle? If your pinging the
+            #system at right at the top of the hour, is there a chance that it
+            #could send you the quote for the previouse period instead of the
+            #newest?
             row = models.Candle()
 
             row.instrument = q.pair
