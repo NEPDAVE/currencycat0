@@ -40,4 +40,9 @@ def seed_top_pairs(top_pairs, granularity='H'):
     for pair in top_pairs:
         seed_db(pair=pair, count=1, granularity=granularity)
 
+@sched.scheduled_job('interval', minutes=60)
+def seed_top_pairs(top_pairs, granularity='M1'):
+    for pair in top_pairs:
+        seed_db(pair=pair, count=1, granularity=granularity)
+
 sched.start()
