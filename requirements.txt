@@ -7,3 +7,4 @@ SQLAlchemy==1.0.5
 Flask-SQLAlchemy==2.1
 psycopg2==2.6.1
 pandas==0.18.1
+APScheduler==3.0.0

@@ -16,10 +16,12 @@ def latest_closemid(instrument, granularity):
     return series.closemid, series.time
 
 
-def average_closemid(instrument, granularity, days):
+def average_closemid(instrument, granularity, periods, days):
     granularity_keys = {"H2": 2, "H3": 3, "H4": 4, "H6": 6, "H8": 8, "H12": 12,
                         "D": 24}
+
     limit = (24 * days)/granularity_keys[granularity]
+    #limit = 20
 
     query = """
     SELECT closemid, time FROM candles
@@ -33,10 +35,10 @@ def average_closemid(instrument, granularity, days):
     return df.closemid.mean(), df.iloc[0].time, df.iloc[-1].time
 
 
-def buy_forex(instrument, granularity, days, percent_lower):
-    average = average_closemid(instrument, granularity, days)
+def buy_forex(instrument, granularity, periods=None, days=None):
+    average = average_closemid(instrument, granularity, periods, days)
     latest = latest_closemid(instrument, granularity)
 
-    print latest[0], average[0], average[0] * (1 - percent_lower)
+    return latest[0] < average[0]
 
-    return latest[0] < average[0] * (1 - percent_lower)
+#print buy_forex("EUR_USD", "H4", periods=20)
