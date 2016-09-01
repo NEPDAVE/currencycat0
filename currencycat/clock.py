@@ -22,22 +22,19 @@ sched.start()
 
 sched = BlockingScheduler()
 
-
-@sched.scheduled_job('interval', minutes=1440)
-def seed_top_pairs(top_pairs, granularity='D'):
-    for pair in top_pairs:
-        seed_db(pair=pair, count=1, granularity=granularity)
-
-
-@sched.scheduled_job('interval', minutes=240)
-def seed_top_pairs(top_pairs, granularity='H4'):
-    for pair in top_pairs:
-        seed_db(pair=pair, count=1, granularity=granularity)
+#@sched.scheduled_job('interval', minutes=1)
+#def seed_top_pairs(top_pairs, granularity='M1'):
+#    for pair in top_pairs:
+#        seed_db(pair=pair, count=1, granularity=granularity)
 
 
-@sched.scheduled_job('interval', minutes=60)
-def seed_top_pairs(top_pairs, granularity='H'):
-    for pair in top_pairs:
-        seed_db(pair=pair, count=1, granularity=granularity)
+@sched.scheduled_job('interval', minutes=1)
+def timed_job():
+    seed_db(pair='EUR_USD', count=1, granularity='M1')
+    print('This job is run every minute.')
+
+#@sched.scheduled_job('interval', minutes=3)
+#def timed_job():
+#    print('This job is run every three minutes.')
 
 sched.start()
