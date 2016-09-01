@@ -1,5 +1,8 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 from currencycat.database import seed_db
+from rq import Queue
+from worker import conn
+
 
 top_pairs = [
     'USD_CAD', 'EUR_JPY', 'EUR_USD', 'EUR_CHF', 'USD_CHF', 'EUR_GBP',
@@ -14,9 +17,11 @@ sched = BlockingScheduler()
 def timed_job_m1():
     for pair in top_pairs:
         print('Adding {}: Granularity, M1').format(pair)
-        seed_db(pair=pair, count=1, granularity='M1')
+        #seed_db(pair=pair, count=1, granularity='M1')
+        q = Queue(connection=conn)
+        job = q.enqueue(seed_db, pair=pair, count=1, granularity='M1')
 
-
+'''
 @sched.scheduled_job('interval', hours=1)
 def timed_job_h1():
     seed_db(pair='EUR_USD', count=1, granularity='H1')
@@ -33,5 +38,5 @@ def timed_job_h4():
 def timed_job_d():
     seed_db(pair='EUR_USD', count=1, granularity='D')
     print('This job is run every 24 hours.')
-
+'''
 sched.start()
