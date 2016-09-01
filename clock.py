@@ -1,7 +1,5 @@
-import currencycat
-
-from database import seed_db
 from apscheduler.schedulers.blocking import BlockingScheduler
+from currencycat.database import seed_db
 
 top_pairs = [
     'USD_CAD', 'EUR_JPY', 'EUR_USD', 'EUR_CHF', 'USD_CHF', 'EUR_GBP',
