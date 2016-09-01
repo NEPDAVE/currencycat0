@@ -28,13 +28,14 @@ sched = BlockingScheduler()
 #        seed_db(pair=pair, count=1, granularity=granularity)
 
 
-@sched.scheduled_job('interval', minutes=1)
-def timed_job():
-    seed_db(pair='EUR_USD', count=1, granularity='M1')
-    print('This job is run every minute.')
-
-#@sched.scheduled_job('interval', minutes=3)
+#@sched.scheduled_job('interval', minutes=1)
 #def timed_job():
-#    print('This job is run every three minutes.')
+#    #seed_db(pair=None, count=None, granularity=None)
+#    seed_db(pair='EUR_USD', count=1, granularity='M1')
+#    print('This job is run every minute.')
+
+@sched.scheduled_job('interval', minutes=3)
+def timed_job():
+    print('This job is run every three minutes.')
 
 sched.start()
