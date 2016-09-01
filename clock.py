@@ -12,15 +12,16 @@ top_pairs = [
 
 sched = BlockingScheduler()
 
-q = Queue(connection=redis_conn)
+q = Queue(connection=conn)
 
 
 @sched.scheduled_job('interval', minutes=1)
 def timed_job_m1():
     for pair in top_pairs:
-        print('Adding {}: Granularity, M1').format(pair)
+        print 'Adding {}: Granularity, M1'.format(pair)
         #seed_db(pair=pair, count=1, granularity='M1')
         job = q.enqueue(seed_db, pair=pair, count=1, granularity='M1')
+        print job.result
 
 '''
 @sched.scheduled_job('interval', hours=1)
