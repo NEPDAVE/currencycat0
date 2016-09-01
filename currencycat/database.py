@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 def seed_db(pair=None, count=None, granularity=None):
-    q = models.Quote(pair=pair, granularity=granularity, count=count)
+    q = models.Quote(pair=pair, count=count, granularity=granularity)
     try:
         for candle in q.response['candles']:
             #FIXME do you want to think about checking if the value is already
