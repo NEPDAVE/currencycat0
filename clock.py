@@ -15,30 +15,28 @@ sched = BlockingScheduler()
 q = Queue(connection=conn)
 
 
-@sched.scheduled_job('interval', minutes=1)
-def timed_job_m1():
-    for pair in top_pairs:
-        print 'Adding {}: Granularity, M1'.format(pair)
-        #seed_db(pair=pair, count=1, granularity='M1')
-        job = q.enqueue(seed_db, pair=pair, count=1, granularity='M1')
-        print job.result
-
-'''
 @sched.scheduled_job('interval', hours=1)
 def timed_job_h1():
-    seed_db(pair='EUR_USD', count=1, granularity='H1')
-    print('This job is run every hour.')
+    print 'Adding {}: Granularity, H1'.format(pair)
+    #seed_db(pair=pair, count=1, granularity='M1')
+    job = q.enqueue(seed_db, pair=pair, count=1, granularity='H1')
+    print job.result
 
 
 @sched.scheduled_job('interval', hours=4)
 def timed_job_h4():
-    seed_db(pair='EUR_USD', count=1, granularity='H4')
-    print('This job is run every four hours.')
+    print 'Adding {}: Granularity, H4'.format(pair)
+    #seed_db(pair=pair, count=1, granularity='M1')
+    job = q.enqueue(seed_db, pair=pair, count=1, granularity='H4')
+    print job.result
 
 
 @sched.scheduled_job('interval', hours=24)
 def timed_job_d():
-    seed_db(pair='EUR_USD', count=1, granularity='D')
-    print('This job is run every 24 hours.')
-'''
+    print 'Adding {}: Granularity, D'.format(pair)
+    #seed_db(pair=pair, count=1, granularity='M1')
+    job = q.enqueue(seed_db, pair=pair, count=1, granularity='D')
+    print job.result
+
+
 sched.start()
