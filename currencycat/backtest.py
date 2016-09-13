@@ -21,65 +21,59 @@ import matplotlib.pyplot as plt
 
 
 class PrepareBacktest(object):
-    def __init__(self, query, engine, width=None):
+    def __init__(self, query, width=None):
         self.query = query
-        self.engine = engine
+        self.engine = db.engine
         self.width = None
-        self.query_db
-        self.calculate_statistics
         self.df = self.create_df()
 
-    def query_db(self, query):
-        raw_df = pd.read_sql_query(query, db.engine)
-        return raw_df
-
-    def calculate_statistics(self, width, raw_df):
+    def create_df(self):
         if not self.width:
             self.width = 20
-        raw_df['mean'] = raw_df.closemid.rolling(window=width).mean()
-        return raw_df.dropna(subset = ['mean'])
-        #f['vwma'] = df.closemid.rolling(window=width).mean()
+        #querying database
+        df = pd.read_sql_query(self.query, self.engine)
+        #Calculating statistics
+        df['mean'] = df.closemid.rolling(window=self.width).mean()
+        df = df.dropna(subset = ['mean'])
+        #df['vwma'] = df.closemid.rolling(window=width).mean()
         #return df.dropna(subset=['vwma'])
-
-    def create_df(self, width=None):
-        if not self.width:
-            self.width = 20
-        raw_df = self.query_db(self.query)
-        self.df = self.calculate_statistics(self.width, raw_df)
-
+        return df
 
 class Backtest(object):
     def __init__(self, df, account_balance):
         self.df = df
         self.account_balance = account_balance
+        self.buy_currency
+        self.convert_to_base_currency
+        self.convert_to_counter_currency
         self.open_position = False
         self.price_paid = None
         self.account_balance_series = []
         self.time_series = []
-        self.backtest_algorithm(account_balance)
+        self.backtest_algorithm()
 
     #where should this live? should it be imported?
-    def buy_currency(closemid, mean):
+    def buy_currency(self, closemid, mean):
         return closemid < mean
 
-    def convert_to_base_currency(account_balance, closemid):
+    def convert_to_base_currency(self, account_balance, closemid):
         account_balance = account_balance/closemid
         return account_balance
 
-    def convert_to_counter_currency(account_balance, closemid):
+    def convert_to_counter_currency(self, account_balance, closemid):
         account_balance = account_balance*closemid
         return account_balance
 
     def backtest_algorithm(self):
-        for closemid, time, mean in df[['closemid', 'time', 'mean']].itertuples(index=False):
-            if open_position:
+        for closemid, time, mean in self.df[['closemid', 'time', 'mean']].itertuples(index=False):
+            if self.open_position:
                 if closemid <= (self.price_paid - (self.price_paid * .00007)):
-                    self.account_balance = convert_to_counter(self.account_balance, closemid)
+                    self.account_balance = self.convert_to_counter_currency(self.account_balance, closemid)
                     self.open_position = False
                 elif closemid >= (self.price_paid + (self.price_paid * .00025)):
-                    account_balance = convert_to_base(self.account_balance, closemid)
-                    open_position = False
-            elif buy_forex(closemid, mean):
+                    self.account_balance = self.convert_to_base_currency(self.account_balance, closemid)
+                    self.open_position = False
+            elif self.buy_currency(closemid, mean):
                 self.price_paid = closemid
                 self.open_position = True
             else:
@@ -87,6 +81,8 @@ class Backtest(object):
 
             self.account_balance_series.append(self.account_balance)
             self.time_series.append(time)
+
+        return self.df
 
 #print len(account_balance_series)
 #print len(time_series)
@@ -101,15 +97,15 @@ class Backtest(object):
 
 
 df = PrepareBacktest('select * from Candles', db.engine)
-data = Backtest(df, 100)
+data = Backtest(df.df, 100)
 
 new_df = pd.DataFrame()
 
 new_df['time'] = data.time_series
 new_df['balance'] = data.account_balance_series
 
+print type(data.time_series)
+print type(data.account_balance_series)
 
-
-
-final = new_df.set_index('time')
-final[['balance']].plot(figsize=(24,12))
+new_df = new_df.set_index('time')
+new_df[['balance']].plot(figsize=(24,12))
