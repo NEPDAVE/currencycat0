@@ -21,28 +21,31 @@ import matplotlib.pyplot as plt
 
 
 class PrepareBacktest(object):
-    def __init__(self, query, width=None):
-    self.query = query
-    self.width = None
-    self.df = df
+    def __init__(self, query, engine, width=None):
+        self.query = query
+        self.engine = engine
+        self.width = None
+        self.query_db
+        self.calculate_statistics
+        self.df = self.create_df()
 
-    def query_db(query):
-        self.df = pd.read_sql_query(query, db.engine)
-        return = self.df
+    def query_db(self, query):
+        raw_df = pd.read_sql_query(query, db.engine)
+        return raw_df
 
-    def calculate_rolling_sma(width=None)):
-        if width=None:
-            width=20
-        df['mean'] = df.closemid.rolling(window = width).mean()
-        self.df=df.dropna(subset = ['mean'])
-        return=self.df
+    def calculate_statistics(self, width, raw_df):
+        if not self.width:
+            self.width = 20
+        raw_df['mean'] = raw_df.closemid.rolling(window=width).mean()
+        return raw_df.dropna(subset = ['mean'])
+        #f['vwma'] = df.closemid.rolling(window=width).mean()
+        #return df.dropna(subset=['vwma'])
 
-    def calculate_rolling_vwma(width=None)):
-        if width = None:
-            width = 20
-        df['vwma'] = df.closemid.rolling(window=width).mean()
-        self.df = df.dropna(subset=['vwma'])
-        return = self.df
+    def create_df(self, width=None):
+        if not self.width:
+            self.width = 20
+        raw_df = self.query_db(self.query)
+        self.df = self.calculate_statistics(self.width, raw_df)
 
 
 class Backtest(object):
@@ -53,7 +56,7 @@ class Backtest(object):
         self.price_paid = None
         self.account_balance_series = []
         self.time_series = []
-        self.backtest(account_balance)
+        self.backtest_algorithm(account_balance)
 
     #where should this live? should it be imported?
     def buy_currency(closemid, mean):
@@ -67,7 +70,7 @@ class Backtest(object):
         account_balance = account_balance*closemid
         return account_balance
 
-    def backtest(self):
+    def backtest_algorithm(self):
         for closemid, time, mean in df[['closemid', 'time', 'mean']].itertuples(index=False):
             if open_position:
                 if closemid <= (self.price_paid - (self.price_paid * .00007)):
@@ -95,13 +98,18 @@ class Backtest(object):
 #dates = matplotlib.dates.date2num(time_series)
 #matplotlib.pyplot.plot_date(dates, account_balance_series)
 
-newdf = pd.DataFrame()
 
-newdf['time'] = time_series
-newdf['balance'] = account_balance_series
 
-#print newdf.columns
-#print newdf
+df = PrepareBacktest('select * from Candles', db.engine)
+data = Backtest(df, 100)
 
-newdf = newdf.set_index('time')
-newdf[['balance']].plot(figsize=(24,12))
+new_df = pd.DataFrame()
+
+new_df['time'] = data.time_series
+new_df['balance'] = data.account_balance_series
+
+
+
+
+final = new_df.set_index('time')
+final[['balance']].plot(figsize=(24,12))
