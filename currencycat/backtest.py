@@ -35,6 +35,7 @@ class PrepareBacktest(object):
         #Calculating statistics
         df['mean'] = df.closemid.rolling(window=self.width).mean()
         df = df.dropna(subset = ['mean'])
+        #FIXME figure out how to calculate the vwap
         #df['vwma'] = df.closemid.rolling(window=width).mean()
         #return df.dropna(subset=['vwma'])
         return df
@@ -83,29 +84,3 @@ class Backtest(object):
             self.time_series.append(time)
 
         return self.df
-
-#print len(account_balance_series)
-#print len(time_series)
-
-#print account_balance_series[:10]
-#print time_series[:10]
-
-
-#dates = matplotlib.dates.date2num(time_series)
-#matplotlib.pyplot.plot_date(dates, account_balance_series)
-
-
-
-df = PrepareBacktest('select * from Candles', db.engine)
-data = Backtest(df.df, 100)
-
-new_df = pd.DataFrame()
-
-new_df['time'] = data.time_series
-new_df['balance'] = data.account_balance_series
-
-print type(data.time_series)
-print type(data.account_balance_series)
-
-new_df = new_df.set_index('time')
-new_df[['balance']].plot(figsize=(24,12))
