@@ -6,6 +6,7 @@ import twilio.twiml
 
 from models import Quote
 from currencycat import app, analysis
+from backtest import main
 
 #Twilio number
 #980 223 6739
@@ -101,3 +102,35 @@ def index():
     params = {q: Quote(pair=q).quote for q in major_pairs}
 
     return render_template('about.html', **params)
+
+@app.route("/backtest")
+def hello():
+    #FIXME you need to call the backtest module to get the account_balace_series
+    #and the time_series
+    backtest_data = backtest.main('select * from candles')
+
+    data = {
+        'x': 'x',
+        'columns': [
+            ['x'],
+            ['former period'],
+            ['latter period'],
+            ],
+        'type': 'bar',
+        'colors': {
+            'former period': '#0000FF',
+            'latter period': '#00FF00',
+            }
+        }
+
+    for timestamp in backtest_data:
+        data['columns'][0].append(str(timestamp))
+        data['columns'][1].append(report_data[topic]['first_period_count'])
+        data['columns'][2].append(report_data[topic]['second_period_count'])
+
+    params = {
+        'data': data
+         }
+
+    print data
+    return render_template('backtest.html', **params)

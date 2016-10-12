@@ -14,7 +14,7 @@ def calculate_statistics(df, width=None):
     df.dropna(subset=['mean'])
     return df
 
-
+#FIXME figure out how to calculate vwap.
 def vwap():
     pass
 
@@ -52,18 +52,22 @@ def backtest_algorithm(df):
         else:
             open_position = False
 
+        #FIXME you need to be returning a df that you will cocatenate from
+        #these two lists. Then you will be able to look at the chart.
         account_balance_series.append(account_balance)
         time_series.append(time)
 
-    return df
+    backtest_data = (account_balance_series, time_series)
+
+    return backtest_data
 
 
 def main(query):
     raw_df = query_db(query)
     df = calculate_statistics(raw_df)
-    backtested_df = backtest_algorithm(df)
-    print backtested_df
-    return backtested_df
+    backtest_data = backtest_algorithm(df)
+    print backtest_data
+    return backtest_data
 
 
 if __name__ == '__main__':
