@@ -6,7 +6,7 @@ import twilio.twiml
 
 from models import Quote
 from currencycat import app, analysis
-from backtest import main
+import backtest
 
 #Twilio number
 #980 223 6739
@@ -108,29 +108,43 @@ def hello():
     #FIXME you need to call the backtest module to get the account_balace_series
     #and the time_series
     backtest_data = backtest.main('select * from candles')
+    print backtest_data
+    print type(backtest_data)
+    print type(backtest_data['time'][0])
+    print type(backtest_data['account_balance'][0])
+    backtest_data['time'].insert(0, 'x')
+    backtest_data['account_balance'].insert(0, 'account_balance')
+    print "###test###"
+    print type(backtest_data['time'][0])
+    print type(backtest_data['account_balance'][0])
 
-    data = {
-        'x': 'x',
-        'columns': [
-            ['x'],
-            ['former period'],
-            ['latter period'],
-            ],
-        'type': 'bar',
-        'colors': {
-            'former period': '#0000FF',
-            'latter period': '#00FF00',
+    timestamp_strings = []
+    for timestamp in backtest_data['time']:
+        timestamp_strings.append(str(timestamp))
+    print timestamp_strings[:10]
+    print backtest_data['account_balance'][:10]
+
+    account_balance_strings = backtest_data['account_balance']
+
+    concated_timestamp_strings = []
+    for date in timestamp_strings:
+        concated_timestamp_strings.append(date[:10].strip())
+
+    print type(concated_timestamp_strings)
+    print concated_timestamp_strings[:10]
+    print type(account_balance_strings)
+    print account_balance_strings[:10]
+
+    data = {'x': 'x',
+            'xFormat': '%Y-%m-%d %H:%M:%S', #format the x axis here
+            'columns': [
+                timestamp_strings,
+                account_balance_strings
+                ]
             }
-        }
 
-    for timestamp in backtest_data:
-        data['columns'][0].append(str(timestamp))
-        data['columns'][1].append(report_data[topic]['first_period_count'])
-        data['columns'][2].append(report_data[topic]['second_period_count'])
+    print len(concated_timestamp_strings)
+    print len(account_balance_strings)
 
-    params = {
-        'data': data
-         }
-
-    print data
+    params = {'data': data}
     return render_template('backtest.html', **params)

@@ -35,6 +35,11 @@ def convert_to_counter_currency(account_balance, closemid):
 
 
 def backtest_algorithm(df):
+    account_balance_series = []
+    time_series = []
+    open_position = None
+    price_paid = None
+    account_balance = 100
     for closemid, time, mean in df[['closemid', 'time', 'mean']].itertuples(
             index=False):
         if open_position:
@@ -57,7 +62,11 @@ def backtest_algorithm(df):
         account_balance_series.append(account_balance)
         time_series.append(time)
 
-    backtest_data = (account_balance_series, time_series)
+    backtest_data = {}
+    backtest_data['account_balance'] = account_balance_series
+    backtest_data['time'] = time_series
+
+    print backtest_data
 
     return backtest_data
 
